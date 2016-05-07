@@ -1,0 +1,16 @@
+# Java build artifacts class files
+*.class
+
+# other generated files
+bin/
+gen/
+build/
+target/
+
+# OSX files
+.DS_Store
+
+# intellij based ides
+*.iml
+.idea
+.gradle
