@@ -327,24 +327,7 @@ public class SQLiteJDBCLoader {
      * @return The version of the SQLite JDBC driver.
      */
     public static String getVersion() {
-
-        URL versionFile = SQLiteJDBCLoader.class.getResource("/META-INF/maven/org.xerial/sqlite-jdbc/pom.properties");
-        if(versionFile == null) {
-            versionFile = SQLiteJDBCLoader.class.getResource("/META-INF/maven/org.xerial/sqlite-jdbc/VERSION");
-        }
-
-        String version = "unknown";
-        try {
-            if(versionFile != null) {
-                Properties versionData = new Properties();
-                versionData.load(versionFile.openStream());
-                version = versionData.getProperty("version", version);
-                version = version.trim().replaceAll("[^0-9\\.]", "");
-            }
-        } catch(IOException e) {
-            System.err.println(e);
-        }
-        return version;
+        return "3.9.1";
     }
 
 }

@@ -231,7 +231,7 @@ public class ConnectionTest
     }
 
     public static File copyToTemp(String fileName) throws IOException {
-        InputStream in = ConnectionTest.class.getResourceAsStream(fileName);
+        InputStream in = ConnectionTest.class.getClassLoader().getResourceAsStream(fileName);
         File dir = new File("target");
         if (!dir.exists())
             dir.mkdirs();

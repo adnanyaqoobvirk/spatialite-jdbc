@@ -1,5 +1,8 @@
 apply plugin: 'java'
 
+sourceSets.test{
+    resources.srcDir 'src/test/java/org/sqlite'
+}
 repositories {
     mavenCentral()
 }

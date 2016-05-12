@@ -45,7 +45,7 @@ $(SQLITE_OUT)/NativeDB.h: $(SQLITE_OUT)/org/sqlite/core/NativeDB.class
 test:
 	gradle test
 
-clean: clean-native clean-java clean-tests
+clean: clean-native clean-java
 
 
 $(SQLITE_OUT)/sqlite3.o : $(SQLITE_UNPACKED)
@@ -123,13 +123,10 @@ mac32:
 
 package: $(NATIVE32_DLL) native
 	gradle assemble
+	gradle test
 
 clean-native:
 	rm -rf $(TARGET)/$(sqlite)-$(OS_NAME)*
 
 clean-java:
-	rm -rf $(TARGET)/*classes
-	rm -rf $(TARGET)/sqlite-jdbc-*jar
-
-clean-tests:
-	rm -rf $(TARGET)/{surefire*,testdb.jar*}
+	gradle clean

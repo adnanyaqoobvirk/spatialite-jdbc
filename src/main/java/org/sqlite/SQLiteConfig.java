@@ -116,6 +116,8 @@ public class SQLiteConfig
         pragmaParams.remove(Pragma.OPEN_MODE.pragmaName);
         pragmaParams.remove(Pragma.SHARED_CACHE.pragmaName);
         pragmaParams.remove(Pragma.LOAD_EXTENSION.pragmaName);
+        pragmaParams.remove(Pragma.SPATIALITE.pragmaName);
+        pragmaParams.remove(Pragma.SPATIALITE_LIBRARY_PATH.pragmaName);
         pragmaParams.remove(Pragma.DATE_PRECISION.pragmaName);
         pragmaParams.remove(Pragma.DATE_CLASS.pragmaName);
         pragmaParams.remove(Pragma.DATE_STRING_FORMAT.pragmaName);
@@ -132,6 +134,13 @@ public class SQLiteConfig
                 if (value != null) {
                     stat.execute(String.format("pragma %s=%s", key, value));
                 }
+            }
+
+            // loading and configuring spatialite extension
+            String path = pragmaTable.getProperty(Pragma.SPATIALITE_LIBRARY_PATH.pragmaName);
+            if(isEnabledSpatialite() && path != null && !path.isEmpty()) {
+                stat.execute(String.format("select load_extension('%s')", path));
+                stat.execute("select initspatialmetadata(1)");
             }
         }
         finally {
@@ -184,6 +193,14 @@ public class SQLiteConfig
      */
     public boolean isEnabledLoadExtension() {
         return getBoolean(Pragma.LOAD_EXTENSION, "false");
+    }
+
+    /**
+     * Checks if the spatialite option is turned on.
+     * @return  True if turned on; false otherwise.
+     */
+    public boolean isEnabledSpatialite() {
+        return getBoolean(Pragma.SPATIALITE, "false");
     }
 
     /**
@@ -245,6 +262,8 @@ public class SQLiteConfig
         LOAD_EXTENSION("enable_load_extension", "Enable SQLite load_extention() function, native driver only", OnOff),
 
         // Pragmas that can be set after opening the database
+        SPATIALITE("enable_spatialite", "Enable Spatialite extension", OnOff),
+        SPATIALITE_LIBRARY_PATH("spatialite_library_path"),
         CACHE_SIZE("cache_size"),
         CASE_SENSITIVE_LIKE("case_sensitive_like", OnOff),
         COUNT_CHANGES("count_changes", OnOff),
@@ -336,6 +355,24 @@ public class SQLiteConfig
      */
     public void enableLoadExtension(boolean enable) {
         set(Pragma.LOAD_EXTENSION, enable);
+    }
+
+    /**
+     * Enables or disables spatialite extension.
+     * @param enable True to enable; false to disable.
+     * @see <a href="https://www.gaia-gis.it/fossil/libspatialite">https://www.gaia-gis.it/fossil/libspatialite</a>
+     */
+    public void enableSpatialite(boolean enable) {
+        set(Pragma.SPATIALITE, enable);
+    }
+
+    /**
+     * Sets path where mod_spatialite is located
+     * @param path non empty directory path.
+     * @see <a href="https://www.gaia-gis.it/fossil/libspatialite">https://www.gaia-gis.it/fossil/libspatialite</a>
+     */
+    public void setSpatialiteLibraryPath(String path) {
+        setPragma(Pragma.SPATIALITE_LIBRARY_PATH, path);
     }
 
     /**

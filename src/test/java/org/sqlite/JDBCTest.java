@@ -9,19 +9,20 @@
 //--------------------------------------
 package org.sqlite;
 
+import static org.junit.Assert.assertNull;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Properties;
+import java.sql.SQLException;
 
-import junit.framework.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JDBCTest
 {
     @Test
-    public void enableLoadExtensionTest() throws Exception {
+    public void enableLoadExtensionTest() throws SQLException {
         Properties prop = new Properties();
         prop.setProperty("enable_load_extension", "true");
 
@@ -47,14 +48,14 @@ public class JDBCTest
     }
 
     @Test
-    public void majorVersion() throws Exception {
+    public void majorVersion() throws SQLException {
         int major = DriverManager.getDriver("jdbc:sqlite:").getMajorVersion();
         int minor = DriverManager.getDriver("jdbc:sqlite:").getMinorVersion();
     }
 
     @Test
-    public void shouldReturnNullIfProtocolUnhandled() throws Exception {
-        Assert.assertNull(JDBC.createConnection("jdbc:anotherpopulardatabaseprotocol:", null));
+    public void shouldReturnNullIfProtocolUnhandled() throws SQLException {
+        assertNull(JDBC.createConnection("jdbc:anotherpopulardatabaseprotocol:", null));
     }
 
 }
